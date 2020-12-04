@@ -9,8 +9,7 @@ const dom = (function() {
     const setClassExceptions = list => classExceptions = list;
 
     const svgToData = svgItem => {
-        let itemClass = svgItem.getAttribute('class');
-        if (itemClass && classExceptions.some(e => e == itemClass)) return false;
+        if (classExceptions.some(e => svgItem.classList.contains(e))) return false;
 
         let data = {
             t: svgItem.nodeName
@@ -53,6 +52,6 @@ const dom = (function() {
     // #endregion
 }())
 
-let svgItem = document.querySelector('svg #all');
+let svgItem = document.querySelector('svg #one');
 let data = dom.svg.toData(svgItem);
 console.log('%c data:', 'background: #ffcc00; color: #003300', data)
