@@ -29,11 +29,12 @@ const dom = (function() {
 
     const getSVGelem = type => document.createElementNS('http://www.w3.org/2000/svg', type);
 
-    const dataToSvg = data => {
+    const dataToSvg = (data, exceptions = []) => {
         let elem = getSVGelem(data.t);
 
         if (typeof data.a != 'undefined') {
             for (let key in data.a) {
+                if (exceptions.some(e => e == key)) continue;
                 elem.setAttribute(key, data.a[key]);
             }
         }
