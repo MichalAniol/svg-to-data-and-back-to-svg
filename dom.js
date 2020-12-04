@@ -5,7 +5,7 @@ const dom = (function() {
     var exceptions = ['id', 'onclick'];
     const setExceptions = list => exceptions = list;
 
-    var classExceptions = ['rail'];
+    var classExceptions = [];
     const setClassExceptions = list => classExceptions = list;
 
     const svgToData = svgItem => {
@@ -32,8 +32,25 @@ const dom = (function() {
         return data;
     }
 
-    const dataToSvg = data => {
+    const getSVGelem = type => document.createElementNS('http://www.w3.org/2000/svg', type);
 
+    const dataToSvg = data => {
+        let elem = getSVGelem(data.t);
+
+        if (typeof data.a != 'undefined') {
+            for (let key in data.a) {
+                elem.setAttribute(key, data.a[key]);
+            }
+        }
+
+        if (typeof data.c != 'undefined') {
+            for (let c of data.c) {
+                let child = dataToSvg(c);
+                elem.append(child);
+            }
+        }
+
+        return elem;
     }
 
     // #endregion
@@ -52,6 +69,10 @@ const dom = (function() {
     // #endregion
 }())
 
-let svgItem = document.querySelector('svg #one');
-let data = dom.svg.toData(svgItem);
+let svgItemOne = document.querySelector('svg #one');
+let data = dom.svg.toData(svgItemOne);
 console.log('%c data:', 'background: #ffcc00; color: #003300', data)
+
+let newSvgItem = dom.svg.fromData(data);
+let svgItemTwo = document.querySelector('svg #two');
+svgItemTwo.append(newSvgItem);
