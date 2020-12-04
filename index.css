@@ -1,0 +1,82 @@
+@font-face {
+    font-family: 'Rubik';
+    font-style: normal;
+    font-weight: 400;
+    src: url('font/Rubik-Regular.eot');
+    src: local('open sans extralight'), local('open-sans-extralight'), url('font/Rubik-Regular.eot?#iefix') format('embedded-opentype'), url('font/Rubik-Regular.woff2') format('woff2'), url('font/Rubik-Regular.woff') format('woff'), url('font/Rubik-Regular.ttf') format('truetype'), url('font/Rubik-Regular.svg#Barlow') format('svg');
+}
+
+:root {
+    --color_1: #55e255;
+    --color_2: #219421;
+    --color_3: #000800;
+    --color_back: black;
+    --color_red: red;
+    --font: 'Rubik', sans-serif
+}
+
+body {
+    margin: 10px;
+    padding: 0;
+    background-color: var(--color_back);
+    color: var(--color_1);
+    font-family: var(--font);
+    font-size: 20px;
+}
+
+svg {
+    width: 300px;
+}
+
+.rail {
+    stroke: var(--color_2);
+    stroke-width: 2.4;
+    fill: none;
+}
+
+.arrow {
+    opacity: 1;
+    fill: #00000000;
+    fill-opacity: 1;
+    stroke: var(--color_2);
+    stroke-width: 0.0611354;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-miterlimit: 4;
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+    pointer-events: visible;
+    transition: all .3s;
+}
+
+.arrow.active:hover {
+    fill: var(--color_2);
+    cursor: pointer;
+}
+
+.ok {
+    fill: none;
+    stroke: var(--color_green);
+    stroke-width: 0.5;
+    stroke-linecap: butt;
+    stroke-linejoin: miter;
+    stroke-miterlimit: 4;
+    stroke-dasharray: none;
+    pointer-events: none;
+    transition: all .3s;
+}
+
+.no {
+    opacity: 1;
+    fill: none;
+    fill-opacity: 0.71372549;
+    stroke: var(--color_red);
+    stroke-width: 0.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-miterlimit: 4;
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+    pointer-events: none;
+    transition: all .3s;
+}
