@@ -2,8 +2,18 @@ const dom = (function() {
 
     // #region [rgba(0,0,120,0.1)] --> 
 
+    var exceptions = ['id'];
+
     const svgToData = svgItem => {
-        let data = { a: svgItem.attributes, t: svgItem.nodeName };
+        let data = {
+            t: svgItem.nodeName
+        };
+
+        for (let attribute of svgItem.attributes) {
+            if (exceptions.some(e => e == attribute.name)) continue;
+            if (typeof data.a == 'undefined') data.a = [];
+            data.a.push(attribute);
+        }
 
         if (svgItem.children.length > 0) {
             data.c = []
@@ -17,7 +27,6 @@ const dom = (function() {
         // console.log('%c svgItem :', 'background: #ffcc00; color: #003300', svgItem)
         // let children = svgItem.children;
 
-        // let attributes = svgItem.attributes;
         // console.log('%c attributes:', 'background: #ffcc00; color: #003300', attributes)
 
         // for (let child of children) {
