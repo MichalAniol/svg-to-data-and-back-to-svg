@@ -2,7 +2,8 @@ const dom = (function() {
 
     // #region [rgba(0,0,120,0.1)] --> 
 
-    var exceptions = ['id'];
+    var exceptions = ['id', 'onclick'];
+    const setExceptions = list => exceptions = list;
 
     const svgToData = svgItem => {
         let data = {
@@ -23,17 +24,6 @@ const dom = (function() {
         }
 
         return data;
-
-        // console.log('%c svgItem :', 'background: #ffcc00; color: #003300', svgItem)
-        // let children = svgItem.children;
-
-        // console.log('%c attributes:', 'background: #ffcc00; color: #003300', attributes)
-
-        // for (let child of children) {
-        //     console.log('%c child:', 'background: #ffcc00; color: #003300', child)
-
-        // }
-
     }
 
     // #endregion
@@ -41,7 +31,10 @@ const dom = (function() {
     // #region [rgba(255,0,255,0.05)] --> URUCHOMIENIE MODUŁU
 
     return {
-        svg: { toData: svgToData }
+        svg: {
+            setExceptions: setExceptions,
+            toData: svgToData
+        }
     }
 
     // #endregion
