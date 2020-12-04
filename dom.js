@@ -2,41 +2,29 @@ const dom = (function() {
 
     // #region [rgba(0,0,120,0.1)] --> 
 
-    var exceptions = [];
-    var classExceptions = [];
+    const svgToData = (item, exceptions = [], classExceptions = []) => {
 
-    const setExceptions = list => exceptions = list;
-    const setClassExceptions = list => classExceptions = list;
+        if (classExceptions.some(e => item.classList.contains(e))) return false;
 
-    const svgToData = (svgItem, exceList = false, classExceList = false) => {
-        if (classExceptions.some(e => svgItem.classList.contains(e))) return false;
+        let data = {
+            t: item.nodeName
+        };
 
-        if (exceList) setExceptions(exceList)
-        if (classExceList) setClassExceptions(classExceList)
-
-        const toData = item => {
-            let data = {
-                t: item.nodeName
-            };
-
-            for (let attribute of item.attributes) {
-                if (exceptions.some(e => e == attribute.name)) continue;
-                if (typeof data.a == 'undefined') data.a = {};
-                data.a[attribute.name] = attribute.value;
-            }
-
-            if (item.children.length > 0) {
-                data.c = []
-                for (let child of item.children) {
-                    let dataFromChild = svgToData(child);
-                    if (dataFromChild) data.c.push(dataFromChild)
-                }
-            }
-
-            return data;
+        for (let attribute of item.attributes) {
+            if (exceptions.some(e => e == attribute.name)) continue;
+            if (typeof data.a == 'undefined') data.a = {};
+            data.a[attribute.name] = attribute.value;
         }
 
-        return toData(svgItem)
+        if (item.children.length > 0) {
+            data.c = []
+            for (let child of item.children) {
+                let dataFromChild = svgToData(child, exceptions, classExceptions);
+                if (dataFromChild) data.c.push(dataFromChild)
+            }
+        }
+
+        return data;
     }
 
     const getSVGelem = type => document.createElementNS('http://www.w3.org/2000/svg', type);
