@@ -2,34 +2,41 @@ const dom = (function() {
 
     // #region [rgba(0,0,120,0.1)] --> 
 
-    var exceptions = ['id', 'onclick'];
-    const setExceptions = list => exceptions = list;
-
+    var exceptions = [];
     var classExceptions = [];
+
+    const setExceptions = list => exceptions = list;
     const setClassExceptions = list => classExceptions = list;
 
-    const svgToData = svgItem => {
+    const svgToData = (svgItem, exceList = false, classExceList = false) => {
         if (classExceptions.some(e => svgItem.classList.contains(e))) return false;
 
-        let data = {
-            t: svgItem.nodeName
-        };
+        if (exceList) setExceptions(exceList)
+        if (classExceList) setClassExceptions(classExceList)
 
-        for (let attribute of svgItem.attributes) {
-            if (exceptions.some(e => e == attribute.name)) continue;
-            if (typeof data.a == 'undefined') data.a = {};
-            data.a[attribute.name] = attribute.value;
-        }
+        const toData = item => {
+            let data = {
+                t: item.nodeName
+            };
 
-        if (svgItem.children.length > 0) {
-            data.c = []
-            for (let child of svgItem.children) {
-                let dataFromChild = svgToData(child);
-                if (dataFromChild) data.c.push(dataFromChild)
+            for (let attribute of item.attributes) {
+                if (exceptions.some(e => e == attribute.name)) continue;
+                if (typeof data.a == 'undefined') data.a = {};
+                data.a[attribute.name] = attribute.value;
             }
+
+            if (item.children.length > 0) {
+                data.c = []
+                for (let child of item.children) {
+                    let dataFromChild = svgToData(child);
+                    if (dataFromChild) data.c.push(dataFromChild)
+                }
+            }
+
+            return data;
         }
 
-        return data;
+        return toData(svgItem)
     }
 
     const getSVGelem = type => document.createElementNS('http://www.w3.org/2000/svg', type);
@@ -59,8 +66,6 @@ const dom = (function() {
 
     return {
         svg: {
-            setExceptions: setExceptions,
-            setClassExceptions: setClassExceptions,
             toData: svgToData,
             fromData: dataToSvg,
         }
@@ -70,7 +75,7 @@ const dom = (function() {
 }())
 
 let svgItemOne = document.querySelector('svg #one');
-let data = dom.svg.toData(svgItemOne);
+let data = dom.svg.toData(svgItemOne, ['id', 'onclick'], ['arrow', 'no']);
 console.log('%c data:', 'background: #ffcc00; color: #003300', data)
 
 let newSvgItem = dom.svg.fromData(data);
