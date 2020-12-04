@@ -5,25 +5,36 @@ const dom = (function() {
     var exceptions = ['id', 'onclick'];
     const setExceptions = list => exceptions = list;
 
+    var classExceptions = ['rail'];
+    const setClassExceptions = list => classExceptions = list;
+
     const svgToData = svgItem => {
+        let itemClass = svgItem.getAttribute('class');
+        if (itemClass && classExceptions.some(e => e == itemClass)) return false;
+
         let data = {
             t: svgItem.nodeName
         };
 
         for (let attribute of svgItem.attributes) {
             if (exceptions.some(e => e == attribute.name)) continue;
-            if (typeof data.a == 'undefined') data.a = [];
-            data.a.push(attribute);
+            if (typeof data.a == 'undefined') data.a = {};
+            data.a[attribute.name] = attribute.value;
         }
 
         if (svgItem.children.length > 0) {
             data.c = []
             for (let child of svgItem.children) {
-                data.c.push(svgToData(child))
+                let dataFromChild = svgToData(child);
+                if (dataFromChild) data.c.push(dataFromChild)
             }
         }
 
         return data;
+    }
+
+    const dataToSvg = data => {
+
     }
 
     // #endregion
@@ -33,7 +44,9 @@ const dom = (function() {
     return {
         svg: {
             setExceptions: setExceptions,
-            toData: svgToData
+            setClassExceptions: setClassExceptions,
+            toData: svgToData,
+            fromData: dataToSvg,
         }
     }
 
